@@ -1,14 +1,14 @@
 #if UNITY_EDITOR
 
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 namespace ab5entSDK
 {
     [CustomEditor(typeof(Transform))]
     public class TransformEditor : Editor
     {
-        private static bool foldoutHelper = true;
+        private static bool isFoldout = true;
 
         private static Vector3 position;
         private static Quaternion rotation;
@@ -34,121 +34,128 @@ namespace ab5entSDK
                 transform = (Transform)target;
             }
 
-            DrawHeader("Location");
+            ProcessPosition();
+            ProcessRotation();
+            ProcessScale();
 
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.Vector3Field("World Position", transform.position);
-            EditorGUI.EndDisabledGroup();
-
-            EditorGUILayout.PropertyField(positionProperty, new GUIContent("Local Position"));
-
-            DrawHeader("Rotation");
-
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.Vector3Field("World Rotation", transform.rotation.eulerAngles);
-            EditorGUI.EndDisabledGroup();
-
-            EditorGUILayout.PropertyField(rotationProperty, new GUIContent("Local Rotation"));
-
-            DrawHeader("Scale");
-
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.Vector3Field("World Scale", transform.lossyScale);
-            EditorGUI.EndDisabledGroup();
-
-            EditorGUILayout.PropertyField(scaleProperty, new GUIContent("Local Scale"));
-
-            GUILayout.Space(10);
-            foldoutHelper = EditorGUILayout.Foldout(foldoutHelper, "Copy And Parse");
-
-            GUILayout.BeginHorizontal();
-
-            ProcessCopy();
-
-            GUILayout.Space(10);
-
-            ProcessParse();
-
-            GUILayout.EndHorizontal();
-
-
+            ProcessExtensions();
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawHeader(string label)
+        private void ProcessPosition()
         {
-            GUILayout.Space(10);
-            GUIStyle style = new GUIStyle(EditorStyles.boldLabel)
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUILayout.Vector3Field("World Position", transform.position);
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUILayout.PropertyField(positionProperty, new GUIContent("LOCAL POSITION"));
+        }
+
+        private void ProcessRotation()
+        {
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUILayout.Vector3Field("World Rotation", transform.rotation.eulerAngles);
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUILayout.PropertyField(rotationProperty, new GUIContent("LOCAL ROTATION"));
+        }
+
+        private void ProcessScale()
+        {
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUILayout.Vector3Field("World Scale", transform.lossyScale);
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUILayout.PropertyField(scaleProperty, new GUIContent("LOCAL SCALE"));
+        }
+
+        private void ProcessExtensions()
+        {
+            isFoldout = EditorGUILayout.BeginFoldoutHeaderGroup(isFoldout, "Copy And Parse");
+
+            if (isFoldout)
             {
-                fontSize = 14
-            };
-            EditorGUILayout.LabelField(label, style);
+                GUILayout.BeginHorizontal("GroupBox");
+                ProcessCopy();
+                ProcessParse();
+                GUILayout.EndHorizontal();
+
+                ProcessReset();
+
+                EditorGUILayout.EndFoldoutHeaderGroup();
+            }
         }
 
         private void ProcessCopy()
         {
-            if (foldoutHelper)
+            GUILayout.BeginVertical();
+
+            if (GUILayout.Button("Copy Position"))
             {
-                GUILayout.BeginVertical();
-
-                if (GUILayout.Button("Copy Position"))
-                {
-                    position = transform.position;
-                }
-
-                if (GUILayout.Button("Copy Rotation"))
-                {
-                    rotation = transform.rotation;
-                }
-
-                if (GUILayout.Button("Copy Scale"))
-                {
-                    scale = transform.localScale;
-                }
-
-                if (GUILayout.Button("Copy Component"))
-                {
-                    position = transform.position;
-                    rotation = transform.rotation;
-                    scale = transform.localScale;
-                }
-
-                GUILayout.EndVertical();
+                position = transform.position;
             }
+
+            if (GUILayout.Button("Copy Rotation"))
+            {
+                rotation = transform.rotation;
+            }
+
+            if (GUILayout.Button("Copy Scale"))
+            {
+                scale = transform.localScale;
+            }
+
+            if (GUILayout.Button("Copy Component"))
+            {
+                position = transform.position;
+                rotation = transform.rotation;
+                scale = transform.localScale;
+            }
+
+            GUILayout.EndVertical();
         }
 
         private void ProcessParse()
         {
-            if (foldoutHelper)
+            GUILayout.BeginVertical();
+
+            if (GUILayout.Button($"Parse Position ({position.x},{position.y},{position.z})"))
             {
-                GUILayout.BeginVertical();
-
-                if (GUILayout.Button($"Parse Position ({position.x},{position.y},{position.z})"))
-                {
-                    transform.position = position;
-                }
-
-                if (GUILayout.Button($"Parse Rotation ({rotation.eulerAngles.x},{rotation.eulerAngles.y},{rotation.eulerAngles.z})"))
-                {
-                    transform.rotation = rotation;
-                }
-
-                if (GUILayout.Button($"Parse Scale ({scale.x},{scale.y},{scale.z})"))
-                {
-                    transform.localScale = scale;
-                }
-
-
-                if (GUILayout.Button("Parse Component"))
-                {
-                    transform.position = position;
-                    transform.rotation = rotation;
-                    transform.localScale = scale;
-                }
-
-                GUILayout.EndVertical();
+                transform.position = position;
             }
+
+            if (GUILayout.Button($"Parse Rotation ({rotation.eulerAngles.x},{rotation.eulerAngles.y},{rotation.eulerAngles.z})"))
+            {
+                transform.rotation = rotation;
+            }
+
+            if (GUILayout.Button($"Parse Scale ({scale.x},{scale.y},{scale.z})"))
+            {
+                transform.localScale = scale;
+            }
+
+
+            if (GUILayout.Button("Parse Component"))
+            {
+                transform.SetPositionAndRotation(position, rotation);
+                transform.localScale = scale;
+            }
+
+            GUILayout.EndVertical();
+        }
+
+        private void ProcessReset()
+        {
+            GUILayout.BeginVertical();
+
+            if (GUILayout.Button("Reset"))
+            {
+                transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                transform.localScale = Vector3.one;
+            }
+
+            GUILayout.EndVertical();
         }
     }
 }
