@@ -3,35 +3,35 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ab5entSDK
+namespace ab5entSDK.Editor
 {
     [CustomEditor(typeof(Transform))]
-    public class TransformEditor : Editor
+    public class TransformEditor : UnityEditor.Editor
     {
-        private static bool isFoldout = true;
+        private static bool _isFoldout = true;
 
-        private static Vector3 position;
-        private static Quaternion rotation;
-        private static Vector3 scale;
+        private static Vector3 _position;
+        private static Quaternion _rotation;
+        private static Vector3 _scale;
 
-        private SerializedProperty positionProperty;
-        private SerializedProperty rotationProperty;
-        private SerializedProperty scaleProperty;
+        private SerializedProperty _positionProperty;
+        private SerializedProperty _rotationProperty;
+        private SerializedProperty _scaleProperty;
 
-        private Transform transform;
+        private Transform _transform;
 
         private void OnEnable()
         {
-            positionProperty = serializedObject.FindProperty("m_LocalPosition");
-            rotationProperty = serializedObject.FindProperty("m_LocalRotation");
-            scaleProperty = serializedObject.FindProperty("m_LocalScale");
+            _positionProperty = serializedObject.FindProperty("m_LocalPosition");
+            _rotationProperty = serializedObject.FindProperty("m_LocalRotation");
+            _scaleProperty = serializedObject.FindProperty("m_LocalScale");
         }
 
         public override void OnInspectorGUI()
         {
-            if (!transform)
+            if (!_transform)
             {
-                transform = (Transform)target;
+                _transform = (Transform)target;
             }
 
             ProcessPosition();
@@ -46,45 +46,49 @@ namespace ab5entSDK
         private void ProcessPosition()
         {
             EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.Vector3Field("World Position", transform.position);
+            EditorGUILayout.Vector3Field("World Position", _transform.position);
             EditorGUI.EndDisabledGroup();
 
-            EditorGUILayout.PropertyField(positionProperty, new GUIContent("LOCAL POSITION"));
+            EditorGUILayout.PropertyField(_positionProperty, new GUIContent("LOCAL POSITION"));
         }
 
         private void ProcessRotation()
         {
             EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.Vector3Field("World Rotation", transform.rotation.eulerAngles);
+            EditorGUILayout.Vector3Field("World Rotation", _transform.rotation.eulerAngles);
             EditorGUI.EndDisabledGroup();
 
-            EditorGUILayout.PropertyField(rotationProperty, new GUIContent("LOCAL ROTATION"));
+            EditorGUILayout.PropertyField(_rotationProperty, new GUIContent("LOCAL ROTATION"));
         }
 
         private void ProcessScale()
         {
             EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.Vector3Field("World Scale", transform.lossyScale);
+            EditorGUILayout.Vector3Field("World Scale", _transform.lossyScale);
             EditorGUI.EndDisabledGroup();
 
-            EditorGUILayout.PropertyField(scaleProperty, new GUIContent("LOCAL SCALE"));
+            EditorGUILayout.PropertyField(_scaleProperty, new GUIContent("LOCAL SCALE"));
         }
 
         private void ProcessExtensions()
         {
-            isFoldout = EditorGUILayout.BeginFoldoutHeaderGroup(isFoldout, "Copy And Parse");
+            _isFoldout = EditorGUILayout.BeginFoldoutHeaderGroup(_isFoldout, "Copy And Parse");
 
-            if (isFoldout)
+            if (!_isFoldout)
             {
-                GUILayout.BeginHorizontal("GroupBox");
-                ProcessCopy();
-                ProcessParse();
-                GUILayout.EndHorizontal();
-
-                ProcessReset();
-
-                EditorGUILayout.EndFoldoutHeaderGroup();
+                return;
             }
+            
+            GUILayout.BeginHorizontal("GroupBox");
+            
+            ProcessCopy();
+            ProcessParse();
+            
+            GUILayout.EndHorizontal();
+
+            ProcessReset();
+
+            EditorGUILayout.EndFoldoutHeaderGroup();
         }
 
         private void ProcessCopy()
@@ -93,24 +97,24 @@ namespace ab5entSDK
 
             if (GUILayout.Button("Copy Position"))
             {
-                position = transform.position;
+                _position = _transform.position;
             }
 
             if (GUILayout.Button("Copy Rotation"))
             {
-                rotation = transform.rotation;
+                _rotation = _transform.rotation;
             }
 
             if (GUILayout.Button("Copy Scale"))
             {
-                scale = transform.localScale;
+                _scale = _transform.localScale;
             }
 
             if (GUILayout.Button("Copy Component"))
             {
-                position = transform.position;
-                rotation = transform.rotation;
-                scale = transform.localScale;
+                _position = _transform.position;
+                _rotation = _transform.rotation;
+                _scale = _transform.localScale;
             }
 
             GUILayout.EndVertical();
@@ -120,26 +124,25 @@ namespace ab5entSDK
         {
             GUILayout.BeginVertical();
 
-            if (GUILayout.Button($"Parse Position ({position.x},{position.y},{position.z})"))
+            if (GUILayout.Button($"Parse Position ({_position.x},{_position.y},{_position.z})"))
             {
-                transform.position = position;
+                _transform.position = _position;
             }
 
-            if (GUILayout.Button($"Parse Rotation ({rotation.eulerAngles.x},{rotation.eulerAngles.y},{rotation.eulerAngles.z})"))
+            if (GUILayout.Button($"Parse Rotation ({_rotation.eulerAngles.x},{_rotation.eulerAngles.y},{_rotation.eulerAngles.z})"))
             {
-                transform.rotation = rotation;
+                _transform.rotation = _rotation;
             }
 
-            if (GUILayout.Button($"Parse Scale ({scale.x},{scale.y},{scale.z})"))
+            if (GUILayout.Button($"Parse Scale ({_scale.x},{_scale.y},{_scale.z})"))
             {
-                transform.localScale = scale;
+                _transform.localScale = _scale;
             }
-
 
             if (GUILayout.Button("Parse Component"))
             {
-                transform.SetPositionAndRotation(position, rotation);
-                transform.localScale = scale;
+                _transform.SetPositionAndRotation(_position, _rotation);
+                _transform.localScale = _scale;
             }
 
             GUILayout.EndVertical();
@@ -151,8 +154,8 @@ namespace ab5entSDK
 
             if (GUILayout.Button("Reset"))
             {
-                transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-                transform.localScale = Vector3.one;
+                _transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+                _transform.localScale = Vector3.one;
             }
 
             GUILayout.EndVertical();
