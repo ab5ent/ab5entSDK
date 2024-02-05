@@ -3,7 +3,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ab5entSDK.Editor
+namespace ab5entSDK.Unity.Editor
 {
     [CustomEditor(typeof(Transform))]
     public class TransformEditor : UnityEditor.Editor
@@ -95,22 +95,22 @@ namespace ab5entSDK.Editor
         {
             GUILayout.BeginVertical();
 
-            if (GUILayout.Button("Copy Position"))
+            if (GUILayout.Button("Copy World Position"))
             {
                 _position = _transform.position;
             }
 
-            if (GUILayout.Button("Copy Rotation"))
+            if (GUILayout.Button("Copy World Rotation"))
             {
                 _rotation = _transform.rotation;
             }
 
-            if (GUILayout.Button("Copy Scale"))
+            if (GUILayout.Button("Copy World Scale"))
             {
                 _scale = _transform.localScale;
             }
 
-            if (GUILayout.Button("Copy Component"))
+            if (GUILayout.Button("Copy World Component"))
             {
                 _position = _transform.position;
                 _rotation = _transform.rotation;
@@ -124,22 +124,22 @@ namespace ab5entSDK.Editor
         {
             GUILayout.BeginVertical();
 
-            if (GUILayout.Button($"Parse Position ({_position.x},{_position.y},{_position.z})"))
+            if (GUILayout.Button($"Parse World Position ({_position.x},{_position.y},{_position.z})"))
             {
                 _transform.position = _position;
             }
 
-            if (GUILayout.Button($"Parse Rotation ({_rotation.eulerAngles.x},{_rotation.eulerAngles.y},{_rotation.eulerAngles.z})"))
+            if (GUILayout.Button($"Parse World Rotation ({_rotation.eulerAngles.x},{_rotation.eulerAngles.y},{_rotation.eulerAngles.z})"))
             {
                 _transform.rotation = _rotation;
             }
 
-            if (GUILayout.Button($"Parse Scale ({_scale.x},{_scale.y},{_scale.z})"))
+            if (GUILayout.Button($"Parse World Scale ({_scale.x},{_scale.y},{_scale.z})"))
             {
                 _transform.localScale = _scale;
             }
 
-            if (GUILayout.Button("Parse Component"))
+            if (GUILayout.Button("Parse World Component"))
             {
                 _transform.SetPositionAndRotation(_position, _rotation);
                 _transform.localScale = _scale;
