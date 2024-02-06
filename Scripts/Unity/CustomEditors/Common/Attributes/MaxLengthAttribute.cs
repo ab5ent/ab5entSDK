@@ -1,6 +1,7 @@
 using UnityEngine;
 
 #if UNITY_EDITOR
+
 using UnityEditor;
 
 #endif
@@ -36,7 +37,7 @@ namespace ab5entSDK.Unity.Editor.Attributes
 
                     if (value.Length > maxLength)
                     {
-                        value = value.Substring(0, maxLength);
+                        value = value[0..maxLength];
                         property.stringValue = value;
                     }
                 }
