@@ -1,4 +1,4 @@
-namespace ab5entSDK.Common.DesignPatterns
+namespace ab5entSDK.Common.DesignPatterns.CreationalPatterns
 {
     public abstract class Singleton<T> where T : Singleton<T>, new()
     {

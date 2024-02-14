@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ab5entSDK.Common.DesignPatterns
+namespace ab5entSDK.Common.DesignPatterns.CreationalPatterns
 {
     public class SingletonMonoBehaviour<T> : MonoBehaviour where T : Component
     {
