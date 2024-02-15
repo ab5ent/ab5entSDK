@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ab5entSDK.Common.DesignPatterns.CreationalPatterns
 {
-    public class SingletonMonoBehaviour<T> : MonoBehaviour where T : Component
+    public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Component
     {
         [SerializeField]
         protected bool enableDontDestroyOnLoad;

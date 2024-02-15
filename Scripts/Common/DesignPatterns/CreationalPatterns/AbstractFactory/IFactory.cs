@@ -1,7 +1,7 @@
 namespace ab5entSDK.Common.DesignPatterns.CreationalPatterns
 {
-    public interface IFactory
+    public interface IFactory<out T> where T : IProduct
     {
-        public IProduct Create();
+        public T Create();
     }
 }
