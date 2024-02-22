@@ -1,4 +1,4 @@
-namespace ab5entSDK.Common.DesignPatterns.StructuralPatterns
+namespace ab5entSDK.Common.DesignPatterns.StructuralPatterns.Adapter
 {
     public interface IAdapter<T> where T : IAdaptee
     {

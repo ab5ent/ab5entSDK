@@ -1,4 +1,4 @@
-namespace ab5entSDK.Common.DesignPatterns.CreationalPatterns
+namespace ab5entSDK.Common.DesignPatterns.CreationalPatterns.ReusablePool
 {
     public interface IReusablePool<T>
     {

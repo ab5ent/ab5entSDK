@@ -1,4 +1,4 @@
-namespace ab5entSDK.Common.DesignPatterns.CreationalPatterns
+namespace ab5entSDK.Common.DesignPatterns.CreationalPatterns.Prototype
 {
     public interface IPrototype<out T>
     {
