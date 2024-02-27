@@ -1,8 +1,8 @@
 namespace ab5entSDK.Common.DesignPatterns.CreationalPatterns.ReusablePool
 {
-    public interface IReusableObject<T>
+    public interface IReusableObject
     {
-        public void SetReusablePool(IReusablePool<T> reusablePool);
+        public void SetReusablePool(object reusablePool);
 
         public void OnCreate();
 
@@ -10,6 +10,6 @@ namespace ab5entSDK.Common.DesignPatterns.CreationalPatterns.ReusablePool
 
         public void OnRelease();
 
-        public void OnDispose();
+        public void OnDiscard();
     }
 }
