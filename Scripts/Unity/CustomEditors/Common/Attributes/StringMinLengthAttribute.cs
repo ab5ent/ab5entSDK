@@ -8,24 +8,24 @@ using UnityEditor;
 
 namespace ab5entSDK.Unity.Editor.Attributes
 {
-    public class MinLengthAttribute : PropertyAttribute
+    public class StringMinLengthAttribute : PropertyAttribute
     {
         public int MinLength { get; private set; }
 
-        public MinLengthAttribute(int length)
+        public StringMinLengthAttribute(int minLength)
         {
-            MinLength = length;
+            MinLength = minLength;
         }
     }
-    
+
 #if UNITY_EDITOR
 
-    [CustomPropertyDrawer(typeof(MinLengthAttribute))]
-    public class MinLengthAttributeDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(StringMinLengthAttribute))]
+    public class StringMinLengthAttributeDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            MinLengthAttribute minLengthAttribute = attribute as MinLengthAttribute;
+            StringMinLengthAttribute minLengthAttribute = attribute as StringMinLengthAttribute;
 
             if (property.propertyType == SerializedPropertyType.String)
             {
@@ -40,16 +40,19 @@ namespace ab5entSDK.Unity.Editor.Attributes
                         value = value.PadRight(minLength, '_');
                         property.stringValue = value;
                     }
+
+                    label.tooltip += $" [min: {minLength}]";
                 }
 
                 EditorGUI.PropertyField(position, property, label);
             }
             else
             {
-                EditorGUI.LabelField(position, label.text, "Use MinLength attribute with string fields.");
+                EditorGUI.LabelField(position, label.text, $"Use {typeof(StringMinLengthAttribute).Name} attribute with string fields.");
             }
         }
     }
 
 #endif
+
 }

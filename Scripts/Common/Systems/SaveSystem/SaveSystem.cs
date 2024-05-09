@@ -17,7 +17,7 @@ namespace ab5entSDK.Common.Systems
         [SerializeField]
         private ESaveType saveType;
 
-        [SerializeField, MinLength(16), MaxLength(16)]
+        [SerializeField, StringMinLength(16), StringMaxLength(16)]
         private string key;
 
         [SerializeField]

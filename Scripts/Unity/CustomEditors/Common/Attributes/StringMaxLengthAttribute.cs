@@ -8,11 +8,11 @@ using UnityEditor;
 
 namespace ab5entSDK.Unity.Editor.Attributes
 {
-    public class MaxLengthAttribute : PropertyAttribute
+    public class StringMaxLengthAttribute : PropertyAttribute
     {
         public int MaxLength { get; private set; }
 
-        public MaxLengthAttribute(int maxLength)
+        public StringMaxLengthAttribute(int maxLength)
         {
             MaxLength = maxLength;
         }
@@ -20,12 +20,12 @@ namespace ab5entSDK.Unity.Editor.Attributes
 
 #if UNITY_EDITOR
 
-    [CustomPropertyDrawer(typeof(MaxLengthAttribute))]
-    public class MaxLengthAttributeDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(StringMaxLengthAttribute))]
+    public class StringMaxLengthAttributeDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            MaxLengthAttribute maxLengthAttribute = attribute as MaxLengthAttribute;
+            StringMaxLengthAttribute maxLengthAttribute = attribute as StringMaxLengthAttribute;
 
             if (property.propertyType == SerializedPropertyType.String)
             {
@@ -40,13 +40,15 @@ namespace ab5entSDK.Unity.Editor.Attributes
                         value = value[0..maxLength];
                         property.stringValue = value;
                     }
+
+                    label.tooltip += $" [max: {maxLength}]";
                 }
 
                 EditorGUI.PropertyField(position, property, label);
             }
             else
             {
-                EditorGUI.LabelField(position, label.text, "Use MaxLength attribute with string fields.");
+                EditorGUI.LabelField(position, label.text, $"Use {typeof(StringMaxLengthAttribute).Name} attribute with string fields.");
             }
         }
     }
