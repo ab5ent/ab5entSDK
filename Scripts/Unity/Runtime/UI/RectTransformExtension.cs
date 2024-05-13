@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ab5entSDK.Unity.Runtime
+namespace ab5entSDK.Unity.Runtime.UI
 {
     public static class RectTransformExtension
     {
