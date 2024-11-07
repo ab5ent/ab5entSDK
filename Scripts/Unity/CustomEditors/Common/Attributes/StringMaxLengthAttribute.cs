@@ -6,7 +6,7 @@ using UnityEditor;
 
 #endif
 
-namespace ab5entSDK.Unity.Editor.Attributes
+namespace ab5entSDK.Unity.ExtendedEditor.Attributes
 {
     public class StringMaxLengthAttribute : PropertyAttribute
     {

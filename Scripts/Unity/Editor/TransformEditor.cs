@@ -3,7 +3,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ab5entSDK.Unity.Editor
+namespace ab5entSDK.Unity.ExtendedEditor
 {
     [CustomEditor(typeof(Transform))]
     public class TransformEditor : UnityEditor.Editor

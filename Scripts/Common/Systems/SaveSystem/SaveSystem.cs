@@ -1,4 +1,4 @@
-using ab5entSDK.Unity.Editor.Attributes;
+using ab5entSDK.Unity.ExtendedEditor.Attributes;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
