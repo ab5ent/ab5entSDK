@@ -1,4 +1,4 @@
-using ab5entSDK.Unity.ExtendedEditor.Attributes;
+using ab5entSDK.ExtendedEditor.Attributes;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,6 +38,5 @@ namespace ab5entSDK.Common.Systems.ManagerSystem
 
             return null;
         }
-
     }
 }

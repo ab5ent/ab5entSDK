@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ab5entSDK.Unity.Runtime.UI
+namespace ab5entSDK.Runtime.UI
 {
     namespace CustomizedCanvasScaler
     {

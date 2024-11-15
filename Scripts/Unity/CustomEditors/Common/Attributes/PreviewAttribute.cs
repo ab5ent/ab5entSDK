@@ -6,7 +6,7 @@ using UnityEditor;
 
 #endif
 
-namespace ab5entSDK.Unity.ExtendedEditor.Attributes
+namespace ab5entSDK.ExtendedEditor.Attributes
 {
     public class PreviewAttribute : PropertyAttribute
     {

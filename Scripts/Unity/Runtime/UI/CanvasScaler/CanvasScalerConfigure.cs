@@ -1,11 +1,8 @@
-using ab5entSDK.Common.DesignPatterns.CreationalPatterns.Factory;
 using System;
 using System.Collections.Generic;
-using System.Security;
 using UnityEngine;
-using UnityEngine.AI;
 
-namespace ab5entSDK.Unity.Runtime.UI
+namespace ab5entSDK.Runtime.UI
 {
     namespace CustomizedCanvasScaler
     {
