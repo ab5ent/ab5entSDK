@@ -34,7 +34,7 @@ namespace ab5entSDK.Tools
             string fileName = DateTime.Now.ToString("MM-dd-yyyy_hh-mm-ss");
             string fileExtension = ".png";
 
-            ScreenCapture.CaptureScreenshot($"{storagePath}/{fileName}/{fileExtension}");
+            ScreenCapture.CaptureScreenshot($"{storagePath}/{fileName}{fileExtension}");
         }
 
 #if UNITY_EDITOR
