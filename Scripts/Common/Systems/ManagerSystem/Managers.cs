@@ -10,15 +10,15 @@ namespace ab5entSDK.Common.Systems.ManagerSystem
         {
             Manager[] managers = rootManager.GetComponentsInChildren<Manager>(true);
 
-            for (int i = 0; i < managers.Length; i++)
+            foreach (var manager in managers)
             {
-                managers[i].SetRoot(rootManager);
-                Add(managers[i].GetType(), managers[i]);
+                manager.SetRoot(rootManager);
+                Add(manager.GetType(), manager);
             }
 
-            for (int i = 0; i < managers.Length; i++)
+            foreach (var manager in managers)
             {
-                managers[i].Initialize();
+                manager.Initialize();
             }
         }
 

@@ -6,11 +6,9 @@ namespace ab5entSDK.Tools
 {
     public class ScreenCaptureTool : MonoBehaviour
     {
-        [SerializeField]
-        private string folderName;
+        [SerializeField] private string folderName;
 
-        [SerializeField]
-        private KeyCode keyCode = KeyCode.F3;
+        [SerializeField] private KeyCode keyCode = KeyCode.F3;
 
         private void Update()
         {
@@ -30,11 +28,13 @@ namespace ab5entSDK.Tools
                 Directory.CreateDirectory(directoryName);
             }
 
-            string storagePath = string.IsNullOrEmpty(folderName) ? $"{Application.persistentDataPath}/Screenshots" : $"{Application.persistentDataPath}/Screenshots/{folderName}";
+            string storagePath = string.IsNullOrEmpty(folderName)
+                ? $"{Application.persistentDataPath}/Screenshots"
+                : $"{Application.persistentDataPath}/Screenshots/{folderName}";
             string fileName = DateTime.Now.ToString("MM-dd-yyyy_hh-mm-ss");
             string fileExtension = ".png";
 
-            ScreenCapture.CaptureScreenshot($"{storagePath}/{fileName}/{fileExtension}");
+            ScreenCapture.CaptureScreenshot($"{storagePath}/{fileName}{fileExtension}");
         }
 
 #if UNITY_EDITOR
@@ -48,6 +48,5 @@ namespace ab5entSDK.Tools
         }
 
 #endif
-
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ab5entSDK.Common.Systems.ManagerSystem
 {
-    public class RootManager : MonoBehaviour
+    public abstract class RootManager : MonoBehaviour
     {
         protected Managers managers;
 

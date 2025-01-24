@@ -6,7 +6,7 @@ namespace ab5entSDK.Common.Systems
 {
     public class TimescaleSystem : MonoBehaviour
     {
-        public bool IsPaused() => Time.timeScale <= 0;
+        public static bool IsPaused() => Time.timeScale <= 0;
 
         public void Pause(float duration = 0)
         {
@@ -18,13 +18,15 @@ namespace ab5entSDK.Common.Systems
             StartCoroutine(ChangeTimeScale(0, 1, duration));
         }
 
-        protected IEnumerator ChangeTimeScale(float startValue, float endValue, float duration)
+        private IEnumerator ChangeTimeScale(float startValue, float endValue, float duration)
         {
             float elapsedTime = 0;
 
             while (elapsedTime < duration)
             {
-                float t = startValue > endValue ? Easing.InSine(elapsedTime / duration) : Easing.OutSine(elapsedTime / duration);
+                float t = startValue > endValue
+                    ? Easing.InSine(elapsedTime / duration)
+                    : Easing.OutSine(elapsedTime / duration);
                 Time.timeScale = Mathf.Lerp(startValue, endValue, t);
                 yield return null;
                 elapsedTime += Time.unscaledDeltaTime;
