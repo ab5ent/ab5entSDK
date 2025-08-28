@@ -1,11 +1,11 @@
 using ab5entSDK.Feature.Base;
+using ab5entSDK.Features.StorableData;
 using Unity.VisualScripting;
 
 namespace ab5entSDK.Features.CheckIn
 {
-    public class CheckInFeature<TRewardData> : IFeature where TRewardData : struct
+    public abstract class CheckInFeature<TRewardData> : IFeature where TRewardData : struct
     {
-
         #region Members
 
         private CheckInData<TRewardData> _data;
@@ -39,7 +39,7 @@ namespace ab5entSDK.Features.CheckIn
             _data = data;
             _data.SetCheckedInDays();
 
-            _userData = new CheckInUserData(Container.Key);
+            _userData = new CheckInUserData(null);
         }
 
         public CheckInData<TRewardData> GetCheckedInData()
@@ -63,6 +63,5 @@ namespace ab5entSDK.Features.CheckIn
         }
 
         #endregion
-
     }
 }

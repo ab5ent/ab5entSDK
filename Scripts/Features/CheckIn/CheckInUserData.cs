@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using ab5entSDK.Scripts.Features;
+using ab5entSDK.Features.StorableData;
 
 namespace ab5entSDK.Features.CheckIn
 {
-    public class CheckInUserData : UserData
+    public class CheckInUserData : BaseStorableData
     {
-
         #region Members
 
         private bool _isCheckedInToday;
@@ -42,9 +41,8 @@ namespace ab5entSDK.Features.CheckIn
 
         #region Methods
 
-        public CheckInUserData(string key) : base(key)
+        public CheckInUserData(IStorageManager storageManager, IStorableData storableData = null) : base(storageManager, storableData)
         {
-
         }
 
         public void CheckIn(int day)
@@ -61,6 +59,5 @@ namespace ab5entSDK.Features.CheckIn
         }
 
         #endregion
-
     }
 }
