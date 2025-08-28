@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace ab5entSDK.Core
 {
-    public class TimeSystem
+    public static class TimeSystem
     {
-
         #region Members
 
         private static readonly DateTime Jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -13,14 +12,14 @@ namespace ab5entSDK.Core
         private static float GetRealtimeSinceStartup => Mathf.Max(Time.realtimeSinceStartup, 0);
 
 
-        private DateTime _syncedTime = DateTime.UtcNow;
-        private float _startTimeSinceStartup;
+        private static DateTime _syncedTime = DateTime.UtcNow;
+        private static float _startTimeSinceStartup;
 
         #endregion
 
         #region Properties
 
-        public bool IsSyncedTime { get; private set; }
+        private static bool IsSyncedTime { get; set; }
 
         #endregion
 
@@ -67,7 +66,7 @@ namespace ab5entSDK.Core
             return TimeSpan.FromSeconds(totalSeconds);
         }
 
-        public string ConvertSecondsToTime(int totalSeconds)
+        public static string ConvertSecondsToTime(int totalSeconds)
         {
             TimeSpan timeSpan = GetTimeSpanFromSeconds(totalSeconds);
             (int days, int hours, int minutes, int seconds, int milliseconds) = GetTimeParts(timeSpan);
@@ -78,7 +77,7 @@ namespace ab5entSDK.Core
 
         #region Methods
 
-        public void Setup(DateTime timeServer, bool isSyncSuccess)
+        public static void Setup(DateTime timeServer, bool isSyncSuccess)
         {
             if (IsSyncedTime)
             {
@@ -96,17 +95,17 @@ namespace ab5entSDK.Core
             _startTimeSinceStartup = GetRealtimeSinceStartup;
         }
 
-        public void AddTimeSync(long seconds)
+        public static void AddTimeSync(long seconds)
         {
             _syncedTime = _syncedTime.AddSeconds(seconds);
         }
 
-        public DateTime Now(TimeType timeType = TimeType.Synced)
+        public static DateTime Now(TimeType timeType = TimeType.Synced)
         {
             return timeType == TimeType.Local ? DateTime.UtcNow : _syncedTime.AddSeconds(GetRealtimeSinceStartup - _startTimeSinceStartup);
         }
 
-        public long NowConverted(TimeType timeType = TimeType.Synced, ConvertTime convertTime = ConvertTime.InSeconds)
+        public static long NowConverted(TimeType timeType = TimeType.Synced, ConvertTime convertTime = ConvertTime.InSeconds)
         {
             return DateTimeConverted(Now(timeType), convertTime);
         }
@@ -115,12 +114,12 @@ namespace ab5entSDK.Core
 
         #region StartTimeOfDay
 
-        public DateTime StartTimeOfDay(TimeType timeType = TimeType.Synced)
+        public static DateTime StartTimeOfDay(TimeType timeType = TimeType.Synced)
         {
             return StartTimeOfDay(Now(timeType));
         }
 
-        public TimeSpan StartTimeOfDayElapsed(TimeType timeType = TimeType.Synced)
+        public static TimeSpan StartTimeOfDayElapsed(TimeType timeType = TimeType.Synced)
         {
             return GetTimeSpanBetween(Now(timeType), StartTimeOfDay(Now(timeType)));
         }
@@ -129,12 +128,12 @@ namespace ab5entSDK.Core
 
         #region EndTimeOfDay
 
-        public DateTime EndTimeOfDay(TimeType timeType = TimeType.Synced)
+        public static DateTime EndTimeOfDay(TimeType timeType = TimeType.Synced)
         {
             return EndTimeOfDay(Now(timeType));
         }
 
-        public TimeSpan EndTimeOfDayRemain(TimeType timeType = TimeType.Synced)
+        public static TimeSpan EndTimeOfDayRemain(TimeType timeType = TimeType.Synced)
         {
             return GetTimeSpanBetween(EndTimeOfDay(timeType), Now(timeType));
         }
@@ -147,14 +146,14 @@ namespace ab5entSDK.Core
 
         #region StartTimeOfWeek
 
-        public DateTime StartTimeOfWeek(TimeType timeType = TimeType.Synced)
+        public static DateTime StartTimeOfWeek(TimeType timeType = TimeType.Synced)
         {
             DateTime now = Now(timeType);
             int daysSinceMonday = ((int)now.DayOfWeek + 6) % 7; // Monday = 0, Sunday = 6
             return now.Date.AddDays(-daysSinceMonday);
         }
 
-        public TimeSpan StartTimeOfWeekElapsed(TimeType timeType = TimeType.Synced)
+        public static TimeSpan StartTimeOfWeekElapsed(TimeType timeType = TimeType.Synced)
         {
             return GetTimeSpanBetween(Now(timeType), StartTimeOfWeek(timeType));
         }
@@ -163,7 +162,7 @@ namespace ab5entSDK.Core
 
         #region EndTimeOfWeek
 
-        public DateTime EndTimeOfWeek(DateTime dateTime)
+        public static DateTime EndTimeOfWeek(DateTime dateTime)
         {
             int daysUntilNextMonday = ((int)DayOfWeek.Monday - (int)dateTime.DayOfWeek + 7) % 7;
 
@@ -175,7 +174,7 @@ namespace ab5entSDK.Core
             return dateTime.Date.AddDays(daysUntilNextMonday).AddMilliseconds(-1);
         }
 
-        public TimeSpan RemainTimeOfWeek(TimeType timeType = TimeType.Synced)
+        public static TimeSpan RemainTimeOfWeek(TimeType timeType = TimeType.Synced)
         {
             return GetTimeSpanBetween(EndTimeOfWeek(Now(timeType)), Now(timeType));
         }
@@ -188,13 +187,13 @@ namespace ab5entSDK.Core
 
         #region StartTimeOfMonth
 
-        public DateTime StartTimeOfMonth(TimeType timeType = TimeType.Synced)
+        public static DateTime StartTimeOfMonth(TimeType timeType = TimeType.Synced)
         {
             DateTime now = Now(timeType);
             return new DateTime(now.Year, now.Month, 1);
         }
 
-        public TimeSpan StartTimeOfMonthElapsed(TimeType timeType = TimeType.Synced)
+        public static TimeSpan StartTimeOfMonthElapsed(TimeType timeType = TimeType.Synced)
         {
             return GetTimeSpanBetween(Now(timeType), StartTimeOfMonth(timeType));
         }
@@ -203,14 +202,14 @@ namespace ab5entSDK.Core
 
         #region EndTimeOfMonth
 
-        public DateTime EndTimeOfMonth(TimeType timeType = TimeType.Synced)
+        public static DateTime EndTimeOfMonth(TimeType timeType = TimeType.Synced)
         {
             DateTime now = Now(timeType);
             DateTime firstDayNextMonth = new DateTime(now.Year, now.Month, 1).AddMonths(1);
             return firstDayNextMonth.AddMilliseconds(-1);
         }
 
-        public TimeSpan RemainTimeOfMonth(TimeType timeType = TimeType.Synced)
+        public static TimeSpan RemainTimeOfMonth(TimeType timeType = TimeType.Synced)
         {
             return GetTimeSpanBetween(EndTimeOfMonth(timeType), Now(timeType));
         }
@@ -237,7 +236,5 @@ namespace ab5entSDK.Core
         }
 
         #endregion
-
     }
-
 }
