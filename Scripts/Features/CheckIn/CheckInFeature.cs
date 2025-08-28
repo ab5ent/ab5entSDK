@@ -1,10 +1,9 @@
 using ab5entSDK.Feature.Base;
 using ab5entSDK.Features.StorableData;
-using Unity.VisualScripting;
 
 namespace ab5entSDK.Features.CheckIn
 {
-    public abstract class CheckInFeature<TRewardData> : IFeature where TRewardData : struct
+    public class CheckInFeature<TRewardData> : IFeature where TRewardData : struct
     {
         #region Members
 
@@ -16,16 +15,11 @@ namespace ab5entSDK.Features.CheckIn
 
         #region Properties
 
-        public IFeatureContainer Container { get; set; }
+        public IFeatureContainer Container { get; private set; }
 
         #endregion
 
         #region Methods
-
-        public void SetContainer(IFeatureContainer container)
-        {
-            Container = container;
-        }
 
         public string GetKey()
         {
@@ -34,12 +28,12 @@ namespace ab5entSDK.Features.CheckIn
 
         public CheckInFeature(IFeatureContainer container, CheckInData<TRewardData> data)
         {
-            SetContainer(container);
+            Container = container;
 
             _data = data;
-            _data.SetCheckedInDays();
+            _data.Initialize();
 
-            _userData = new CheckInUserData(null);
+            _userData = BaseStorableData.CreateInstance<CheckInUserData>();
         }
 
         public CheckInData<TRewardData> GetCheckedInData()
@@ -47,20 +41,60 @@ namespace ab5entSDK.Features.CheckIn
             return _data;
         }
 
-        public void CheckIn(int day)
+        public DailyCheckInData<TRewardData> GetDailyCheckInData(int dayIndex)
         {
-            bool hasCheckInDay = _data.HasCheckInDay(day);
+            return HasCheckInData(dayIndex) ? _data.GetDailyCheckInData(dayIndex) : null;
+        }
 
-            if (hasCheckInDay || _userData.IsCheckedInToday)
+        private bool HasCheckInData(int dayIndex)
+        {
+            return _data.HasCheckInDay(dayIndex);
+        }
+
+        #region UserData
+
+        public void ResetUserData()
+        {
+            _userData.ResetData();
+        }
+
+        private bool CanCheckIn(int dayIndex)
+        {
+            return HasCheckInData(dayIndex) && _userData.CanCheckIn(dayIndex);
+        }
+
+        public void CheckIn(int dayIndex)
+        {
+            if (CanCheckIn(dayIndex))
             {
-                _userData.CheckIn(day);
+                _userData.CheckIn(dayIndex);
             }
         }
 
-        public bool HasCheckInDay(int day)
+        public bool IsCheckedIn(int dayIndex)
         {
-            return _data.HasCheckInDay(day);
+            return HasCheckInData(dayIndex) && _userData.IsCheckedIn(dayIndex);
         }
+
+        private bool CanClaimReward(int dayIndex)
+        {
+            return HasCheckInData(dayIndex) && _userData.CanClaimedReward(dayIndex);
+        }
+
+        public void ClaimReward(int dayIndex)
+        {
+            if (CanClaimReward(dayIndex))
+            {
+                _userData.ClaimReward(dayIndex);
+            }
+        }
+
+        public bool IsClaimedReward(int dayIndex)
+        {
+            return HasCheckInData(dayIndex) && _userData.IsClaimedReward(dayIndex);
+        }
+
+        #endregion
 
         #endregion
     }

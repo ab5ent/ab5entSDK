@@ -4,7 +4,7 @@ namespace ab5entSDK.Features.StorableData
     {
         #region Properties
 
-        public string Key { get; set; }
+        public string Key { get; }
 
         public IStorableData StorableData { get; }
 
@@ -15,6 +15,8 @@ namespace ab5entSDK.Features.StorableData
         #endregion
 
         #region Methods
+
+        public void Initialize(string key = "", IStorageManager storageManager = null, IStorableData storableData = null);
 
         public void OnDataChanged();
 

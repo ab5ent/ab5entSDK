@@ -1,14 +1,16 @@
+using ab5entSDK.Features.CheckIn;
+
 namespace ab5entSDK.Features.StorableData
 {
     public abstract class BaseStorableData : IStorableData
     {
         #region Properties
 
-        public string Key { get; set; }
+        public string Key { get; private set; }
 
-        public IStorableData StorableData { get; protected set; }
+        public IStorableData StorableData { get; private set; }
 
-        public IStorageManager StorageManager { get; protected set; }
+        public IStorageManager StorageManager { get; private set; }
 
         public bool CanSaveData { get; set; }
 
@@ -16,8 +18,9 @@ namespace ab5entSDK.Features.StorableData
 
         #region Methods
 
-        protected BaseStorableData(IStorageManager storageManager = null, IStorableData storableData = null)
+        public void Initialize(string key = "", IStorageManager storageManager = null, IStorableData storableData = null)
         {
+            Key = string.IsNullOrEmpty(key) ? GetType().Name : $"{key}_{GetType().Name}";
             StorageManager = storageManager;
             StorableData = storableData ?? this;
         }
@@ -44,11 +47,34 @@ namespace ab5entSDK.Features.StorableData
             }
         }
 
-        public virtual T LoadData<T>() where T : class
+        public virtual void ResetData()
         {
-            return StorageManager.Load<T>(Key);
+            DataChanged();
         }
 
         #endregion
+
+        public static T CreateInstance<T>(string key = "", IStorageManager storageManager = null, IStorableData storableData = null) where T : BaseStorableData, new()
+        {
+            if (storageManager != null && !string.IsNullOrEmpty(key))
+            {
+                var loaded = storageManager.Load<T>(key);
+
+                if (loaded != null)
+                {
+                    loaded.Initialize(key, storageManager, storableData);
+                    return loaded;
+                }
+            }
+
+            var instance = new T();
+            instance.Initialize(key, storageManager, storableData);
+            return instance;
+        }
+
+        protected BaseStorableData()
+        {
+            Key = GetType().Name;
+        }
     }
 }

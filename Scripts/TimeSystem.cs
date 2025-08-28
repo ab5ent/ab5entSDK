@@ -7,7 +7,7 @@ namespace ab5entSDK.Core
     {
         #region Members
 
-        private static readonly DateTime Jan1st1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTime Jan1St1970 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         private static float GetRealtimeSinceStartup => Mathf.Max(Time.realtimeSinceStartup, 0);
 
@@ -39,9 +39,9 @@ namespace ab5entSDK.Core
         {
             return convertTime switch
             {
-                ConvertTime.InSeconds => (long)(dateTime - Jan1st1970).TotalSeconds,
-                ConvertTime.InMiniSeconds => (long)(dateTime - Jan1st1970).TotalMilliseconds,
-                ConvertTime.InDays => (long)(dateTime - Jan1st1970).TotalDays,
+                ConvertTime.InSeconds => (long)(dateTime - Jan1St1970).TotalSeconds,
+                ConvertTime.InMiniSeconds => (long)(dateTime - Jan1St1970).TotalMilliseconds,
+                ConvertTime.InDays => (long)(dateTime - Jan1St1970).TotalDays,
                 _ => 0
             };
         }
@@ -217,6 +217,14 @@ namespace ab5entSDK.Core
         #endregion
 
         #endregion
+
+        public static bool HasDayChangedSince(long momentInSeconds)
+        {
+            DateTime moment = Jan1St1970.AddSeconds(momentInSeconds);
+            DateTime now = Now();
+
+            return StartTimeOfDay(now) > StartTimeOfDay(moment);
+        }
 
         #endregion
 

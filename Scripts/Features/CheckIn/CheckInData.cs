@@ -11,19 +11,32 @@ namespace ab5entSDK.Features.CheckIn
 
         [field: SerializeField] public bool StreakCheckIn { get; protected set; }
 
-        public void SetCheckedInDays()
+        public void Initialize()
         {
             _checkInDays = new HashSet<int>();
 
             foreach (DailyCheckInData<TRewardData> daily in Daily)
             {
-                _checkInDays.Add(daily.Day);
+                _checkInDays.Add(daily.DayIndex);
             }
         }
 
         public bool HasCheckInDay(int day)
         {
             return _checkInDays.Contains(day);
+        }
+
+        public DailyCheckInData<TRewardData> GetDailyCheckInData(int dayIndex)
+        {
+            for (int i = 0; i < Daily.Length; i++)
+            {
+                if (Daily[i].DayIndex == dayIndex)
+                {
+                    return Daily[i];
+                }
+            }
+
+            return null;
         }
 
         public void AutoAssignDays()
@@ -35,15 +48,15 @@ namespace ab5entSDK.Features.CheckIn
         }
     }
 
-    public class DailyCheckInData<TRewardData> where TRewardData : struct
+    public abstract class DailyCheckInData<TRewardData> where TRewardData : struct
     {
-        [field: SerializeField] public int Day { get; protected set; }
+        [field: SerializeField] public int DayIndex { get; private set; }
 
         [field: SerializeField] public TRewardData[] Rewards { get; protected set; }
 
         public void SetDay(int day)
         {
-            Day = day;
+            DayIndex = day;
         }
     }
 }
