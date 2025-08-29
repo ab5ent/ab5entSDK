@@ -226,6 +226,14 @@ namespace ab5entSDK.Core
             return StartTimeOfDay(now) > StartTimeOfDay(moment);
         }
 
+        public static bool HasADayChangedSince(long momentInSeconds)
+        {
+            DateTime moment = Jan1St1970.AddSeconds(momentInSeconds);
+            DateTime now = Now();
+
+            return (int)((StartTimeOfDay(now) - StartTimeOfDay(moment)).TotalDays) == 1;
+        }
+
         #endregion
 
         #region Enums

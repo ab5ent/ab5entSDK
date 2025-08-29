@@ -3,7 +3,7 @@ using ab5entSDK.Features.StorableData;
 
 namespace ab5entSDK.Features.CheckIn
 {
-    public class CheckInFeature<TRewardData> : IFeature where TRewardData : struct
+    public class CheckInFeature<TRewardData> : BaseFeature where TRewardData : struct
     {
         #region Members
 
@@ -17,24 +17,25 @@ namespace ab5entSDK.Features.CheckIn
 
         public IFeatureContainer Container { get; private set; }
 
+        public EFeatureType FeatureType { get; protected set; } = EFeatureType.CheckIn;
+
         #endregion
 
         #region Methods
 
-        public string GetKey()
-        {
-            return GetType().Name.ToLower();
-        }
-
-        public CheckInFeature(IFeatureContainer container, CheckInData<TRewardData> data)
+        public void Initialize(IFeatureContainer container, CheckInData<TRewardData> data)
         {
             Container = container;
 
             _data = data;
             _data.Initialize();
 
-            _userData = BaseStorableData.CreateInstance<CheckInUserData>();
+            _userData = BaseStorableData.Load<CheckInUserData>();
+
+            ValidateSessionCheckIn();
         }
+
+        #region Data
 
         public CheckInData<TRewardData> GetCheckedInData()
         {
@@ -51,11 +52,33 @@ namespace ab5entSDK.Features.CheckIn
             return _data.HasCheckInDay(dayIndex);
         }
 
+        private bool IsStreakCheckIn()
+        {
+            return _data.StreakCheckIn;
+        }
+
+        #endregion
+
         #region UserData
 
-        public void ResetUserData()
+        private void ValidateSessionCheckIn()
         {
-            _userData.ResetData();
+            if (!IsStreakCheckIn())
+            {
+                CheckIn(_userData.LastCheckInDayIndex + 1);
+            }
+            else
+            {
+                StreakCheckIn(_userData.LastCheckInDayIndex + 1);
+            }
+        }
+
+        private void StreakCheckIn(int dayIndex)
+        {
+            if (CanCheckIn(dayIndex))
+            {
+                _userData.StreakCheckIn(dayIndex);
+            }
         }
 
         private bool CanCheckIn(int dayIndex)
@@ -63,17 +86,12 @@ namespace ab5entSDK.Features.CheckIn
             return HasCheckInData(dayIndex) && _userData.CanCheckIn(dayIndex);
         }
 
-        public void CheckIn(int dayIndex)
+        private void CheckIn(int dayIndex)
         {
             if (CanCheckIn(dayIndex))
             {
                 _userData.CheckIn(dayIndex);
             }
-        }
-
-        public bool IsCheckedIn(int dayIndex)
-        {
-            return HasCheckInData(dayIndex) && _userData.IsCheckedIn(dayIndex);
         }
 
         private bool CanClaimReward(int dayIndex)
@@ -92,6 +110,11 @@ namespace ab5entSDK.Features.CheckIn
         public bool IsClaimedReward(int dayIndex)
         {
             return HasCheckInData(dayIndex) && _userData.IsClaimedReward(dayIndex);
+        }
+
+        public override void ResetUserData()
+        {
+            _userData.ResetData();
         }
 
         #endregion

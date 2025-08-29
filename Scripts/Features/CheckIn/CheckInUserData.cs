@@ -9,6 +9,10 @@ namespace ab5entSDK.Features.CheckIn
     {
         #region Members
 
+        [field: SerializeField] private int _highestStreakDayCheckIn;
+
+        [field: SerializeField] private int _lastCheckInDayIndex;
+
         [field: SerializeField] private List<int> _checkedInDays;
 
         [field: SerializeField] private List<int> _claimedRewardsDays;
@@ -18,6 +22,16 @@ namespace ab5entSDK.Features.CheckIn
         #endregion
 
         #region Properties
+
+        public int LastCheckInDayIndex
+        {
+            get => _lastCheckInDayIndex;
+            set
+            {
+                _lastCheckInDayIndex = value;
+                DataChanged();
+            }
+        }
 
         public List<int> CheckedInDays
         {
@@ -43,14 +57,32 @@ namespace ab5entSDK.Features.CheckIn
 
         #region Methods
 
+        #region Checkin
+
         public void CheckIn(int dayIndex)
         {
-            if (dayIndex < 0 || CanCheckIn(dayIndex))
+            _checkedInDays.Add(dayIndex);
+            _lastCheckInDayIndex = dayIndex;
+            _lastCheckInTimeInSeconds = TimeSystem.NowConverted();
+
+            DataChanged();
+        }
+
+        public void StreakCheckIn(int dayIndex)
+        {
+            if (HasADayChangedSinceLastCheckIn())
             {
-                return;
+                _lastCheckInDayIndex = dayIndex;
+                _highestStreakDayCheckIn = Mathf.Max(_highestStreakDayCheckIn, dayIndex);
+                _checkedInDays.Add(dayIndex);
+            }
+            else
+            {
+                _lastCheckInDayIndex = -1;
+                _highestStreakDayCheckIn = -1;
+                _checkedInDays.Clear();
             }
 
-            _checkedInDays.Add(dayIndex);
             _lastCheckInTimeInSeconds = TimeSystem.NowConverted();
 
             DataChanged();
@@ -58,39 +90,36 @@ namespace ab5entSDK.Features.CheckIn
 
         public bool CanCheckIn(int dayIndex)
         {
-            return !CheckedInDays.Contains(dayIndex) && TimeSystem.HasDayChangedSince(_lastCheckInTimeInSeconds);
+            return !IsCheckedIn(dayIndex) && HasDayChangedSinceLastCheckIn();
         }
 
-        public bool IsCheckedIn(int dayIndex)
+        private bool IsCheckedIn(int dayIndex)
         {
             return CheckedInDays.Contains(dayIndex);
         }
 
+        private bool HasADayChangedSinceLastCheckIn()
+        {
+            return TimeSystem.HasADayChangedSince(_lastCheckInTimeInSeconds);
+        }
+
+        private bool HasDayChangedSinceLastCheckIn()
+        {
+            return TimeSystem.HasDayChangedSince(_lastCheckInTimeInSeconds);
+        }
+
         #endregion
+
+        #region ClaimReward
 
         public bool CanClaimedReward(int dayIndex)
         {
-            return (CanCheckIn(dayIndex) || IsCheckedIn(dayIndex)) && !IsClaimedReward(dayIndex);
+            return IsCheckedIn(dayIndex) && !IsClaimedReward(dayIndex);
         }
 
         public void ClaimReward(int dayIndex)
         {
-            if (dayIndex < 0)
-            {
-                return;
-            }
-
-            if (!IsCheckedIn(dayIndex))
-            {
-                _checkedInDays.Add(dayIndex);
-                _claimedRewardsDays.Add(dayIndex);
-                _lastCheckInTimeInSeconds = TimeSystem.NowConverted();
-            }
-            else
-            {
-                _claimedRewardsDays.Add(dayIndex);
-            }
-
+            _claimedRewardsDays.Add(dayIndex);
             DataChanged();
         }
 
@@ -101,12 +130,18 @@ namespace ab5entSDK.Features.CheckIn
 
         public override void ResetData()
         {
+            _highestStreakDayCheckIn = -1;
             _lastCheckInTimeInSeconds = 0;
+            _lastCheckInDayIndex = -1;
 
             _checkedInDays.Clear();
             _claimedRewardsDays.Clear();
 
             base.ResetData();
         }
+
+        #endregion
+
+        #endregion
     }
 }

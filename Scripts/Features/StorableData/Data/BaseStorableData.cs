@@ -54,7 +54,7 @@ namespace ab5entSDK.Features.StorableData
 
         #endregion
 
-        public static T CreateInstance<T>(string key = "", IStorageManager storageManager = null, IStorableData storableData = null) where T : BaseStorableData, new()
+        public static T Load<T>(string key = "", IStorageManager storageManager = null, IStorableData storableData = null) where T : BaseStorableData, new()
         {
             if (storageManager != null && !string.IsNullOrEmpty(key))
             {
