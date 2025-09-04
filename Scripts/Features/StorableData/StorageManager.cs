@@ -15,6 +15,7 @@ namespace ab5entSDK.Features.StorableData
 {
     public class StorageManager : IStorageManager
     {
+
         #region Constants
 
         private const float AddSaveRequestInterval = 0.02f;
@@ -34,11 +35,11 @@ namespace ab5entSDK.Features.StorableData
         private readonly Dictionary<string, IStorableData> _rawRequests, _tempRawRequests;
         private readonly Queue<SaveRequest> _pendingSaveRequests;
 
-#if UNITASK_SUPPORT
+        #if UNITASK_SUPPORT
         private readonly List<UniTask> _pendingSaveRequestTasks;
-#else
+        #else
         private readonly List<Task> _pendingSaveRequestTasks;
-#endif
+        #endif
 
         #endregion
 
@@ -53,11 +54,11 @@ namespace ab5entSDK.Features.StorableData
             _encryption = encryption;
             _jsonConvert = jsonConvert;
 
-#if UNITASK_SUPPORT
+            #if UNITASK_SUPPORT
             _pendingSaveRequestTasks = new List<UniTask>();
-#else
+            #else
             _pendingSaveRequestTasks = new List<Task>();
-#endif
+            #endif
 
             _pendingSaveRequests = new Queue<SaveRequest>();
             _rawRequests = new Dictionary<string, IStorableData>();
@@ -125,11 +126,11 @@ namespace ab5entSDK.Features.StorableData
 
             try
             {
-#if UNITASK_SUPPORT
+                #if UNITASK_SUPPORT
                 UniTask task = UniTask.RunOnThreadPool(() => ConvertToSaveRequest(snapshotData));
-#else
+                #else
                 Task task = Task.Run(() => ConvertToSaveRequest(snapshotData));
-#endif
+                #endif
                 lock (_pendingSaveRequests)
                 {
                     _pendingSaveRequestTasks.Add(task);
@@ -195,11 +196,11 @@ namespace ab5entSDK.Features.StorableData
 
         private void WaitToConvertToSaveRequests()
         {
-#if UNITASK_SUPPORT
+            #if UNITASK_SUPPORT
             UniTask[] tasksToWait;
-#else
+            #else
             Task[] tasksToWait;
-#endif
+            #endif
             lock (_pendingSaveRequestTasks)
             {
                 tasksToWait = _pendingSaveRequestTasks.ToArray();
@@ -208,11 +209,11 @@ namespace ab5entSDK.Features.StorableData
 
             try
             {
-#if UNITASK_SUPPORT
+                #if UNITASK_SUPPORT
                 UniTask.WhenAll(tasksToWait).AsTask().Wait(100);
-#else
+                #else
                 Task.WaitAll(tasksToWait, 100);
-#endif
+                #endif
             }
             catch (Exception e)
             {
@@ -317,6 +318,7 @@ namespace ab5entSDK.Features.StorableData
                 Debug.Log($"[StorageManager] Flushed {_rawRequests.Count} objects in {flushDurationMs:F2} ms");
 
                 #endregion
+
             }
             catch (Exception e)
             {
@@ -356,7 +358,7 @@ namespace ab5entSDK.Features.StorableData
 
                 return _jsonConvert.ConvertToObject<T>(json);
             }
-            catch (System.Exception ex)
+            catch (SystemException ex)
             {
                 Debug.LogError($"Failed to load key '{key}': {ex.Message}");
                 return null;
@@ -386,7 +388,7 @@ namespace ab5entSDK.Features.StorableData
                 value = _jsonConvert.ConvertToObject<T>(json);
                 return true;
             }
-            catch (System.Exception ex)
+            catch (SystemException ex)
             {
                 Debug.LogError($"Failed to load key '{key}': {ex.Message}");
                 return false;
@@ -409,5 +411,6 @@ namespace ab5entSDK.Features.StorableData
         }
 
         #endregion
+
     }
 }

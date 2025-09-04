@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -9,10 +7,22 @@ namespace ab5entSDK.Tools
 {
     public class ClearDataTool : MonoBehaviour
     {
-        [MenuItem("Tools/Clear Data")]
+        [MenuItem("Tools/Ab5snt/Clear Data/All")]
         public static void ClearData()
         {
             ClearPlayerPrefs();
+            ClearUserPersistentData();
+        }
+
+        [MenuItem("Tools/Ab5snt/Clear Data/Clear Player Prefs")]
+        public static void ClearOnlyPlayerPrefs()
+        {
+            ClearPlayerPrefs();
+        }
+
+        [MenuItem("Tools/Ab5snt/Clear Data/Clear Persistent Data")]
+        public static void ClearOnlyPersistentData()
+        {
             ClearUserPersistentData();
         }
 

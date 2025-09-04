@@ -54,6 +54,7 @@ namespace ab5entSDK.Features.StorableData
             try
             {
                 string filePath = GetFilePath(key);
+
                 if (File.Exists(filePath))
                 {
                     string encryptedJson = File.ReadAllText(filePath);
@@ -79,6 +80,7 @@ namespace ab5entSDK.Features.StorableData
             try
             {
                 string filePath = GetFilePath(key);
+
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);

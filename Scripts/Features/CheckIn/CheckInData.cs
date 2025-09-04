@@ -1,13 +1,16 @@
+using System;
 using System.Collections.Generic;
+using ab5entSDK.Core;
 using UnityEngine;
 
 namespace ab5entSDK.Features.CheckIn
 {
-    public class CheckInData<TRewardData> where TRewardData : struct
+    [Serializable]
+    public class CheckInData
     {
         private HashSet<int> _checkInDays;
 
-        [field: SerializeField] public DailyCheckInData<TRewardData>[] Daily { get; protected set; }
+        [field: SerializeField] public DailyCheckInData[] Daily { get; protected set; }
 
         [field: SerializeField] public bool StreakCheckIn { get; protected set; }
 
@@ -15,7 +18,7 @@ namespace ab5entSDK.Features.CheckIn
         {
             _checkInDays = new HashSet<int>();
 
-            foreach (DailyCheckInData<TRewardData> daily in Daily)
+            foreach (DailyCheckInData daily in Daily)
             {
                 _checkInDays.Add(daily.DayIndex);
             }
@@ -26,7 +29,7 @@ namespace ab5entSDK.Features.CheckIn
             return _checkInDays.Contains(day);
         }
 
-        public DailyCheckInData<TRewardData> GetDailyCheckInData(int dayIndex)
+        public DailyCheckInData GetDailyCheckInData(int dayIndex)
         {
             for (int i = 0; i < Daily.Length; i++)
             {
@@ -48,15 +51,19 @@ namespace ab5entSDK.Features.CheckIn
         }
     }
 
-    public abstract class DailyCheckInData<TRewardData> where TRewardData : struct
+    [Serializable]
+    public class DailyCheckInData
     {
+        [field: SerializeField] public string DayKey { get; protected set; }
+
         [field: SerializeField] public int DayIndex { get; private set; }
 
-        [field: SerializeField] public TRewardData[] Rewards { get; protected set; }
+        [field: SerializeField] public Reward[] Rewards { get; protected set; }
 
         public void SetDay(int day)
         {
             DayIndex = day;
+            DayKey = $"Day_{day}";
         }
     }
 }

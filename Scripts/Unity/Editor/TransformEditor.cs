@@ -78,12 +78,12 @@ namespace ab5entSDK.ExtendedEditor
             {
                 return;
             }
-            
+
             GUILayout.BeginHorizontal("GroupBox");
-            
+
             ProcessCopy();
             ProcessParse();
-            
+
             GUILayout.EndHorizontal();
 
             ProcessReset();

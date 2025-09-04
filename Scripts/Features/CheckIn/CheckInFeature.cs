@@ -1,13 +1,14 @@
-using ab5entSDK.Feature.Base;
+using ab5entSDK.Features.Core;
 using ab5entSDK.Features.StorableData;
 
 namespace ab5entSDK.Features.CheckIn
 {
-    public class CheckInFeature<TRewardData> : BaseFeature where TRewardData : struct
+    public class CheckInFeature : BaseFeature
     {
-        #region Members
 
-        private CheckInData<TRewardData> _data;
+        #region Fields
+
+        private CheckInData _data;
 
         private CheckInUserData _userData;
 
@@ -15,34 +16,38 @@ namespace ab5entSDK.Features.CheckIn
 
         #region Properties
 
-        public IFeatureContainer Container { get; private set; }
-
-        public EFeatureType FeatureType { get; protected set; } = EFeatureType.CheckIn;
-
         #endregion
 
         #region Methods
 
-        public void Initialize(IFeatureContainer container, CheckInData<TRewardData> data)
+        public CheckInFeature(string key, IFeatureContainer container) : base(key, container)
         {
-            Container = container;
+            FeatureType = EFeatureType.CheckIn;
+        }
 
+        public CheckInFeature(string key) : base(key)
+        {
+            FeatureType = EFeatureType.CheckIn;
+        }
+
+        public void Initialize(CheckInData data)
+        {
             _data = data;
             _data.Initialize();
 
-            _userData = BaseStorableData.Load<CheckInUserData>();
+            _userData = BaseStorableData.Load<CheckInUserData>(Key);
 
             ValidateSessionCheckIn();
         }
 
         #region Data
 
-        public CheckInData<TRewardData> GetCheckedInData()
+        public CheckInData GetCheckedInData()
         {
             return _data;
         }
 
-        public DailyCheckInData<TRewardData> GetDailyCheckInData(int dayIndex)
+        public DailyCheckInData GetDailyCheckInData(int dayIndex)
         {
             return HasCheckInData(dayIndex) ? _data.GetDailyCheckInData(dayIndex) : null;
         }
@@ -120,5 +125,6 @@ namespace ab5entSDK.Features.CheckIn
         #endregion
 
         #endregion
+
     }
 }

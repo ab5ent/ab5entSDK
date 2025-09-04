@@ -1,7 +1,6 @@
 using UnityEngine;
 
 #if UNITY_EDITOR
-
 using UnityEditor;
 
 #endif
@@ -18,7 +17,7 @@ namespace ab5entSDK.ExtendedEditor.Attributes
         }
     }
 
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
 
     [CustomPropertyDrawer(typeof(StringMaxLengthAttribute))]
     public class StringMaxLengthAttributeDrawer : PropertyDrawer
@@ -53,6 +52,6 @@ namespace ab5entSDK.ExtendedEditor.Attributes
         }
     }
 
-#endif
+    #endif
 
 }

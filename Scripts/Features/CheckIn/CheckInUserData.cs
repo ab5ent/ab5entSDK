@@ -7,6 +7,7 @@ namespace ab5entSDK.Features.CheckIn
 {
     public class CheckInUserData : BaseStorableData
     {
+
         #region Members
 
         [field: SerializeField] private int _highestStreakDayCheckIn;
@@ -143,5 +144,6 @@ namespace ab5entSDK.Features.CheckIn
         #endregion
 
         #endregion
+
     }
 }

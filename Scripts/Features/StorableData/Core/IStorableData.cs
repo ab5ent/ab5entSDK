@@ -2,6 +2,7 @@ namespace ab5entSDK.Features.StorableData
 {
     public interface IStorableData
     {
+
         #region Properties
 
         public string Key { get; }
@@ -25,5 +26,6 @@ namespace ab5entSDK.Features.StorableData
         public void DataChanged();
 
         #endregion
+
     }
 }

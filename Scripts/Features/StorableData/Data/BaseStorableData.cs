@@ -1,9 +1,8 @@
-using ab5entSDK.Features.CheckIn;
-
 namespace ab5entSDK.Features.StorableData
 {
     public abstract class BaseStorableData : IStorableData
     {
+
         #region Properties
 
         public string Key { get; private set; }
@@ -18,7 +17,7 @@ namespace ab5entSDK.Features.StorableData
 
         #region Methods
 
-        public void Initialize(string key = "", IStorageManager storageManager = null, IStorableData storableData = null)
+        public virtual void Initialize(string key = "", IStorageManager storageManager = null, IStorableData storableData = null)
         {
             Key = string.IsNullOrEmpty(key) ? GetType().Name : $"{key}_{GetType().Name}";
             StorageManager = storageManager;
@@ -58,7 +57,7 @@ namespace ab5entSDK.Features.StorableData
         {
             if (storageManager != null && !string.IsNullOrEmpty(key))
             {
-                var loaded = storageManager.Load<T>(key);
+                T loaded = storageManager.Load<T>(key);
 
                 if (loaded != null)
                 {
@@ -67,7 +66,7 @@ namespace ab5entSDK.Features.StorableData
                 }
             }
 
-            var instance = new T();
+            T instance = new T();
             instance.Initialize(key, storageManager, storableData);
             return instance;
         }

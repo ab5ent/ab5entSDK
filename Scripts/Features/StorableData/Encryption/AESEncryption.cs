@@ -42,6 +42,7 @@ namespace ab5entSDK.Features.StorableData
             if (plainText == null) throw new ArgumentNullException(nameof(plainText));
 
             byte[] passwordBytes = null;
+
             try
             {
                 passwordBytes = ConvertSecureStringToByteArray(password);
@@ -83,6 +84,7 @@ namespace ab5entSDK.Features.StorableData
                 // Compute HMAC over (salt || iv || ciphertext)
                 byte[] toMac = ConcatAll(salt, iv, cipherBytes);
                 byte[] hmac;
+
                 using (var h = new HMACSHA256(macKey))
                 {
                     hmac = h.ComputeHash(toMac);
@@ -151,6 +153,7 @@ namespace ab5entSDK.Features.StorableData
                 // Verify HMAC
                 byte[] toMac = ConcatAll(salt, iv, cipherBytes);
                 byte[] expectedHmac;
+
                 using (var h = new HMACSHA256(macKey))
                 {
                     expectedHmac = h.ComputeHash(toMac);
@@ -219,6 +222,7 @@ namespace ab5entSDK.Features.StorableData
             }
 
             var secureString = new SecureString();
+
             foreach (char c in strPassword)
             {
                 secureString.AppendChar(c);
@@ -231,6 +235,7 @@ namespace ab5entSDK.Features.StorableData
         private static byte[] ConvertSecureStringToByteArray(SecureString secureString)
         {
             IntPtr ptr = IntPtr.Zero;
+
             try
             {
                 ptr = Marshal.SecureStringToGlobalAllocUnicode(secureString);
@@ -264,6 +269,7 @@ namespace ab5entSDK.Features.StorableData
             int length = arrays.Sum(a => a.Length);
             byte[] result = new byte[length];
             int pos = 0;
+
             foreach (var a in arrays)
             {
                 Buffer.BlockCopy(a, 0, result, pos, a.Length);
@@ -277,16 +283,18 @@ namespace ab5entSDK.Features.StorableData
         private static bool FixedTimeEquals(byte[] a, byte[] b)
         {
             if (a == null || b == null || a.Length != b.Length) return false;
-#if NETCOREAPP || NET5_0_OR_GREATER
+            #if NETCOREAPP || NET5_0_OR_GREATER
         return System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(a, b);
-#else
+            #else
             int diff = 0;
+
             for (int i = 0; i < a.Length; i++)
                 diff |= a[i] ^ b[i];
             return diff == 0;
-#endif
+            #endif
         }
 
         #endregion
+
     }
 }

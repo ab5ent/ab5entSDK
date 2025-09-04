@@ -38,11 +38,11 @@ namespace ab5entSDK.Features.StorableData
             catch (Exception ex)
             {
                 Debug.LogError($"XOR Encryption failed: {ex.Message}");
-#if UNITY_EDITOR
+                #if UNITY_EDITOR
                 return plainText;
-#else
+                #else
             throw;
-#endif
+                #endif
             }
         }
 
@@ -61,11 +61,11 @@ namespace ab5entSDK.Features.StorableData
             catch (Exception ex)
             {
                 Debug.LogError($"XOR Decryption failed: {ex.Message}");
-#if UNITY_EDITOR
+                #if UNITY_EDITOR
                 return cipherText;
-#else
+                #else
             throw;
-#endif
+                #endif
             }
         }
     }

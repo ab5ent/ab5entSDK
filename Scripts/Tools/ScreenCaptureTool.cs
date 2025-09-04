@@ -37,7 +37,7 @@ namespace ab5entSDK.Tools
             ScreenCapture.CaptureScreenshot($"{storagePath}/{fileName}{fileExtension}");
         }
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
 
 
         [ContextMenu("Open storages")]
@@ -47,6 +47,6 @@ namespace ab5entSDK.Tools
             UnityEditor.EditorUtility.RevealInFinder(directoryName);
         }
 
-#endif
+        #endif
     }
 }

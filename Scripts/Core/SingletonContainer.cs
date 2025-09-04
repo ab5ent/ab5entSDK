@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Ab5entSDK.Core
+namespace ab5entSDK.Core
 {
     public static class SingletonContainer
     {
@@ -47,7 +47,7 @@ namespace Ab5entSDK.Core
             }
         }
 
-        public static void Register<T>(T instance) where T : class, ISingleton
+        public static void Register(ISingleton instance)
         {
             if (instance == null)
             {
@@ -56,8 +56,8 @@ namespace Ab5entSDK.Core
 
             lock (Lock)
             {
-                Instances[typeof(T)] = instance;
-                Debug.Log("[SingletonContainer] registered instance: " + typeof(T).Name);
+                Instances[instance.GetType()] = instance;
+                Debug.Log("[SingletonContainer] registered instance: " + instance.GetType().Name);
             }
         }
 
@@ -70,13 +70,18 @@ namespace Ab5entSDK.Core
             }
         }
 
-        public static void Unregister<T>() where T : class, ISingleton
+        public static void Unregister(ISingleton instance)
         {
+            if (instance == null)
+            {
+                return;
+            }
+
             lock (Lock)
             {
-                Type type = typeof(T);
+                Type type = instance.GetType();
                 Instances.Remove(type);
-                Debug.Log("[SingletonContainer] removed instance: " + typeof(T).Name);
+                Debug.Log("[SingletonContainer] removed instance: " + type.Name);
             }
         }
     }

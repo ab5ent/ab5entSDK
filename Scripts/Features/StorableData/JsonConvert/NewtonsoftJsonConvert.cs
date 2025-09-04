@@ -13,7 +13,7 @@ namespace ab5entSDK.Features.StorableData
                 return default;
             }
 
-#if NEWTONSOFT_JSON_SUPPORT
+            #if NEWTONSOFT_JSON_SUPPORT
             try
             {
                 return JsonConvert.DeserializeObject<T>(json);
@@ -23,13 +23,13 @@ namespace ab5entSDK.Features.StorableData
                 UnityEngine.Debug.LogError($"[JsonConvert] Failed to deserialize: {e.Message}");
                 return default;
             }
-#endif
+            #endif
             return default;
         }
 
         public string ConvertToJson<T>(T data)
         {
-#if NEWTONSOFT_JSON_SUPPORT
+            #if NEWTONSOFT_JSON_SUPPORT
             try
             {
                 return JsonConvert.SerializeObject(data, Formatting.None);
@@ -39,7 +39,7 @@ namespace ab5entSDK.Features.StorableData
                 UnityEngine.Debug.LogError($"[JsonConvert] Failed to serialize: {e.Message}");
                 return null;
             }
-#endif
+            #endif
             return null;
         }
     }
