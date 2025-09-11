@@ -14,9 +14,9 @@ namespace ab5entSDK.Features.CheckIn
 
         [field: SerializeField] private int _lastCheckInDayIndex;
 
-        [field: SerializeField] private List<int> _checkedInDays;
+        [field: SerializeField] private List<int> _checkedInDays = new List<int>();
 
-        [field: SerializeField] private List<int> _claimedRewardsDays;
+        [field: SerializeField] private List<int> _claimedRewardsDays = new List<int>();
 
         [field: SerializeField] private long _lastCheckInTimeInSeconds;
 
@@ -142,6 +142,10 @@ namespace ab5entSDK.Features.CheckIn
         }
 
         #endregion
+
+        public override void PopulateFields()
+        {
+        }
 
         #endregion
 

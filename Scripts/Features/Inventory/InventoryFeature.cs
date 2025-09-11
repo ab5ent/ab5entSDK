@@ -37,6 +37,8 @@ namespace ab5entSDK.Features.Core.Inventory
             _userData = BaseStorableData.Load<InventoryUserData>(Key);
         }
 
+        public GameAssetInstance this[CurrencyDefinition definition] => _userData.Currency[definition];
+
         #endregion
 
         // public event Action OnInventoryChanged;
@@ -94,4 +96,5 @@ namespace ab5entSDK.Features.Core.Inventory
             _userData.ResetData();
         }
     }
+
 }

@@ -7,7 +7,15 @@ namespace ab5entSDK.Core
     {
         [SerializeField, HideInInspector] protected string id;
 
+        [SerializeField] protected GameAssetType typeOfAsset;
+
+        [SerializeField] protected GameAssetScope scope;
+
         public string Id => id;
+
+        public GameAssetScope Scope => scope;
+
+        public GameAssetType TypeOfAssetOfGameAsset => typeOfAsset;
 
         #if UNITY_EDITOR
 

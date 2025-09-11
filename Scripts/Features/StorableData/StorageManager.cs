@@ -259,6 +259,7 @@ namespace ab5entSDK.Features.StorableData
             {
                 _isFlushingToDisk = true;
                 float startFlushTime = Time.realtimeSinceStartup;
+                int totalRequests;
 
                 if (forceFlush)
                 {
@@ -268,6 +269,7 @@ namespace ab5entSDK.Features.StorableData
                 lock (_rawRequests)
                 {
                     // for not look _rawRequests
+                    totalRequests = _rawRequests.Count;
                     _tempRawRequests.AddRange(_rawRequests);
                     _rawRequests.Clear();
                 }
@@ -302,6 +304,8 @@ namespace ab5entSDK.Features.StorableData
                     }
                 }
 
+                _tempRawRequests.Clear();
+
                 if (forceFlush)
                 {
                     WaitToConvertToSaveRequests();
@@ -315,7 +319,7 @@ namespace ab5entSDK.Features.StorableData
                 var endFlushTime = Time.realtimeSinceStartup;
                 var flushDurationMs = (endFlushTime - startFlushTime) * 1000f;
 
-                Debug.Log($"[StorageManager] Flushed {_rawRequests.Count} objects in {flushDurationMs:F2} ms");
+                Debug.Log($"[StorageManager] Flushed {totalRequests} objects in {flushDurationMs:F2} ms");
 
                 #endregion
 

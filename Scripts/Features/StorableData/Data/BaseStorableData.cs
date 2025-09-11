@@ -22,6 +22,8 @@ namespace ab5entSDK.Features.StorableData
             Key = string.IsNullOrEmpty(key) ? GetType().Name : $"{key}_{GetType().Name}";
             StorageManager = storageManager;
             StorableData = storableData ?? this;
+
+            PopulateFields();
         }
 
         public virtual void DataChanged()
@@ -51,13 +53,21 @@ namespace ab5entSDK.Features.StorableData
             DataChanged();
         }
 
+        public abstract void PopulateFields();
+
+        protected BaseStorableData()
+        {
+            Key = GetType().Name;
+        }
+
         #endregion
 
         public static T Load<T>(string key = "", IStorageManager storageManager = null, IStorableData storableData = null) where T : BaseStorableData, new()
         {
             if (storageManager != null && !string.IsNullOrEmpty(key))
             {
-                T loaded = storageManager.Load<T>(key);
+                string validatedKey = string.IsNullOrEmpty(key) ? typeof(T).Name : $"{key}_{typeof(T).Name}";
+                T loaded = storageManager.Load<T>(validatedKey);
 
                 if (loaded != null)
                 {
@@ -71,9 +81,6 @@ namespace ab5entSDK.Features.StorableData
             return instance;
         }
 
-        protected BaseStorableData()
-        {
-            Key = GetType().Name;
-        }
+
     }
 }

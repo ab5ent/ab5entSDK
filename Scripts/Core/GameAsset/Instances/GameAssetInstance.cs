@@ -5,9 +5,9 @@ using UnityEngine;
 [Serializable]
 public class GameAssetInstance
 {
-    [field: SerializeField] private readonly string _definitionId;
+    [field: SerializeField] private string _definitionId;
 
-    [field: SerializeField] private readonly Guid _instanceId;
+    [field: SerializeField] private Guid _instanceId;
 
     [field: SerializeField] private int _quantity;
 
@@ -53,7 +53,7 @@ public class GameAssetInstance
         _quantity = newQuantity;
     }
 
-    public void ModifyQuantity(int modifyQuantity)
+    public void ChangeQuantity(int modifyQuantity)
     {
         _quantity = Mathf.Max(_quantity + modifyQuantity, 0);
     }
