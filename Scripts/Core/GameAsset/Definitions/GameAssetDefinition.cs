@@ -13,10 +13,6 @@ namespace ab5entSDK.Core
 
         public string Id => id;
 
-        public GameAssetScope Scope => scope;
-
-        public GameAssetType TypeOfAssetOfGameAsset => typeOfAsset;
-
         #if UNITY_EDITOR
 
         protected virtual void OnValidate()
