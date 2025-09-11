@@ -9,7 +9,7 @@ namespace ab5entSDK.Core
 
         public string Id => id;
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
 
         protected virtual void OnValidate()
         {
@@ -22,7 +22,6 @@ namespace ab5entSDK.Core
             UnityEditor.EditorUtility.SetDirty(this);
         }
 
-
-        #endif
+#endif
     }
 }
