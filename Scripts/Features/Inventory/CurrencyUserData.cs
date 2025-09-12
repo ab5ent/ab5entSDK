@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using ab5entSDK.Core;
 using ab5entSDK.Features.StorableData;
 using UnityEngine;
-using NotImplementedException = System.NotImplementedException;
 
 namespace ab5entSDK.Features.Inventory
 {
     [Serializable]
     public class CurrencyUserData : BaseStorableData
     {
-
         #region Fields
 
-        [field: SerializeField] private List<GameAssetInstance> _data = new List<GameAssetInstance>();
+        [field: SerializeField] private readonly List<GameAssetInstance> _data = new List<GameAssetInstance>();
 
-        private Dictionary<string, GameAssetInstance> _global = new Dictionary<string, GameAssetInstance>();
+        private readonly Dictionary<string, GameAssetInstance> _global = new Dictionary<string, GameAssetInstance>();
 
         #endregion
 
@@ -70,6 +68,5 @@ namespace ab5entSDK.Features.Inventory
         }
 
         #endregion
-
     }
 }

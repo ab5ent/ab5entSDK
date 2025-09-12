@@ -2,7 +2,6 @@ namespace ab5entSDK.Features.StorableData
 {
     public abstract class BaseStorableData : IStorableData
     {
-
         #region Properties
 
         public string Key { get; private set; }
@@ -80,7 +79,5 @@ namespace ab5entSDK.Features.StorableData
             instance.Initialize(key, storageManager, storableData);
             return instance;
         }
-
-
     }
 }

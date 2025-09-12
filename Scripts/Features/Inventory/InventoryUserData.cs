@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using ab5entSDK.Core;
 using ab5entSDK.Features.StorableData;
 using UnityEngine;
 
@@ -23,13 +21,12 @@ namespace ab5entSDK.Features.Inventory
 
         public override void PopulateFields()
         {
-
         }
 
         public override void ResetData()
         {
-            base.ResetData();
             currencyUserData.ResetData();
+            base.ResetData();
         }
     }
 }

@@ -5,7 +5,6 @@ namespace ab5entSDK.Features.CheckIn
 {
     public class CheckInFeature : BaseFeature
     {
-
         #region Fields
 
         private CheckInData _data;
@@ -125,6 +124,5 @@ namespace ab5entSDK.Features.CheckIn
         #endregion
 
         #endregion
-
     }
 }

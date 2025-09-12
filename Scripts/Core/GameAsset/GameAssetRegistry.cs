@@ -22,9 +22,9 @@ namespace ab5entSDK.Core
             UnityEngine.Debug.LogError($"Duplicate GameAssetDefinition Id: {def.Id}");
         }
 
-        public static GameAssetDefinition Get(string id)
+        public static T Get<T>(string id) where T : GameAssetDefinition
         {
-            return _definitions.GetValueOrDefault(id);
+            return _definitions.GetValueOrDefault(id) as T;
         }
 
         public static IEnumerable<GameAssetDefinition> GetAll()
